@@ -1911,14 +1911,14 @@ pub fn civilFromDays(days: Days) Date {
 
     // Adjust for 100/400 leap year rule, reverse day count
     const rev: u64 = d_shift -% @as(u64, @bitCast(@as(i64, days)));
-    const cen: u64 = @truncate(@as(u128, c1) * rev >> 64);
+    const cen: u64 = @truncate((@as(u128, c1) * rev) >> 64);
     const jul: u64 = rev +% cen -% cen / 4;
 
     // Determine year and year-part
     const num: u128 = @as(u128, c2) * jul;
     const yrs: u64 = y_shift -% @as(u64, @truncate(num >> 64));
     const low: u64 = @truncate(num);
-    const ypt: u64 = @truncate(@as(u128, 24451 * scale) * low >> 64);
+    const ypt: u64 = @truncate((@as(u128, 24451 * scale) * low) >> 64);
 
     // Year-modulo-bitshift for leap years
     const bump: u64, const shift: u64, const month: u64 = if (is_arm) blk: {
@@ -1934,7 +1934,7 @@ pub fn civilFromDays(days: Days) Date {
     };
 
     const n: u64 = (yrs % 4) * (16 * scale) +% shift -% ypt;
-    const day: u64 = @truncate(@as(u128, c3) * (n % (2048 * scale)) >> 64);
+    const day: u64 = @truncate((@as(u128, c3) * (n % (2048 * scale))) >> 64);
 
     return .{
         .year = @intCast(@as(i64, @bitCast(yrs)) + @as(i64, @intCast(bump))),

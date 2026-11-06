@@ -375,7 +375,7 @@ pub const Posix = struct {
         if (self.isDST(timestamp)) {
             return .{
                 .designation = self.dst orelse self.std,
-                .timestamp = timestamp - (self.dst_offset orelse self.std_offset - s_per_hour),
+                .timestamp = timestamp - (self.dst_offset orelse (self.std_offset - s_per_hour)),
                 .is_dst = true,
             };
         }
